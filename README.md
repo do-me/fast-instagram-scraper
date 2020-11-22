@@ -25,4 +25,7 @@ Install torpy with: `pip3 install torpy` or `pip install torpy`.
 ## Idea
 Use one tor end node to get as many requests as possible. Experience tells: a normal end node can do 15-40 requests (each one 50 posts) waiting around 10 seconds each time. Let's do the math: if you got a good node, you'll get 40x50 posts in 400 seconds which gives you a rate of 5 posts per second or even faster if you just want to <500 posts.
 
-
+## To Do
+- Fix progress bar (might be tqdm bug related)
+- Add hashtag scraping (easy, just hash an some keys change) 
+- Add possibility to scrape a list of location IDs
