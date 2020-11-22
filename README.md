@@ -27,5 +27,5 @@ Use one tor end node to get as many requests as possible. Experience tells: a no
 
 ## To Do
 - Fix progress bar (might be tqdm bug related)
-- Add hashtag scraping (easy, just hash an some keys change) 
+- Add hashtag scraping (easy, just hash and some keys change) 
 - Add possibility to scrape a list of location IDs
