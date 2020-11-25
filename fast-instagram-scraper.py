@@ -65,9 +65,13 @@ def add_location_data(l_node):
     return l_node
 
 # executes above functions for a list of posts (JSON-nodes)
-def add_locations_data_to_cleaned_node(nodelist):
-    nodelist = [add_location_data(delete_keys(i["node"])) for i in nodelist] # chained functions and list comprehension
-    return nodelist
+def add_locations_data_to_cleaned_node(nodelist, just_clean = False):
+    if just_clean == True:
+        nodelist = [delete_keys(i["node"]) for i in nodelist]
+        return nodelist
+    else:
+        nodelist = [add_location_data(delete_keys(i["node"])) for i in nodelist] # chained functions and list comprehension
+        return nodelist
         
 total_posts = 0
 # main scraping function
@@ -123,6 +127,8 @@ def torsession(first_iter = False):
                 if location_or_hashtag == "location":
                     ploc = idata["data"][location_or_hashtag]
                     ipage = add_locations_data_to_cleaned_node(ipage)
+                else: 
+                    ipage = add_locations_data_to_cleaned_node(ipage, just_clean=True)
                     
                 post_list.extend(ipage) # extend list with all posts (50 every time)
                 pbar.update(len(ipage))
