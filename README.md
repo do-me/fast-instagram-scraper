@@ -70,8 +70,7 @@ Example commands:
 For the last command hashtag argument is a fallback in case the list passed after is not valid. If --location_or_hashtag_list is valid hashtag will be overwritten by the respective value.
 
 ## To Do
-- Fix progress bar and set up logfile (might be tqdm.notebook bug related)
-
+- Fix progress bar (might be tqdm.notebook bug related) and set up logfile
 ## More
 - [Blog article](https://geo.rocks/post/fast-instagram-scraper/) about Fast Instagram Scraper
 - Find me on [my blog](https://geo.rocks)!
