@@ -1,7 +1,9 @@
 # Fast Instagram Scraper
-v1.1.1
+v1.2.0
 
-A fast Instagram Scraper based on Torpy. Scrapes posts for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/).
+## Jupyter and fully functional command line version available! 
+
+A fast Instagram Scraper based on Torpy. Scrapes posts for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) at once.
 
 *Requirements: [Torpy](https://github.com/torpyorg/torpy) package installed but no login and no API-Key. Working for all OS.*
 
@@ -26,6 +28,42 @@ Install torpy with: `pip3 install torpy` or `pip install torpy`. If you like Tor
 
 ## Idea
 Use one tor end node to get as many requests as possible. Experience tells: a normal end node can do 15-40 requests (each one 50 posts) waiting around 10 seconds each time. Let's do the math: if you got a good node, you'll get 40x50 posts in 400 seconds which gives you a rate of 5 posts per second or even faster if you just want to <500 posts.
+
+## Jupyter Version
+You will find detailed information in the notebook.
+
+## Command Line Version 
+
+Positional Arguments:
+```
+  object_id_or_string         Location id or hashtag like 12345678 or truckfonalddump. 
+                              If --list, enter the item list here comma separated like    
+                              loveyourlife,justdoit,truckfonalddump
+  location_or_hashtag         "location" or "hashtag"
+```
+
+Optional Arguments:
+```
+  -h, --help                  Show this help message and exit
+  --out_dir                   Path to store csv like /.../scrape/ default is working directory
+  --max_posts                 Limit posts to scrape 
+  --max_requests              Limit requests
+  --wait_between_requests     Waiting time between requests in seconds
+  --max_tor_renew             Max number of new tor sessions
+  --run_number                Additional file name part like "_v2" for "1234567_v2.csv"
+  --location_or_hashtag_list  For heterogenous hashtag/location list scraping only: provide another list with hashtag,location,...
+  --list                      Scrape for list
+  --last_cursor               Continue from where you quit before (last_cursor)
+```  
+Example commands:
+```
+1. python fast-instagram-scraper.py byebyedonald hashtag 
+2. python fast-instagram-scraper.py 123456789987 location --max_posts 10000 --max_tor_renew 100
+3. python fast-instagram-scraper.py 123456789987 location --last_cursor --out_dir "/.../directory/folder/"
+4. python fast-instagram-scraper.py byebyedonald,hellohereIam,georocks hashtag --list
+5. python fast-instagram-scraper.py byebyedonald,123456789987,georocks hashtag --list --location_or_hashtag_list hashtag,location,hashtag --max_posts 100 
+```
+For the last command hashtag argument is a fallback in case the list passed after is not valid. If --location_or_hashtag_list is valid hashtag will be overwritten by the respective value.
 
 ## To Do
 - Fix progress bar and set up logfile (might be tqdm.notebook bug related)
