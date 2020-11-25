@@ -1,4 +1,5 @@
 # Fast Instagram Scraper
+v1.1.1
 A fast Instagram Scraper based on Torpy. Scrapes posts for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/).
 
 *Requirements: [Torpy](https://github.com/torpyorg/torpy) package installed but no login and no API-Key. Working for all OS.*
