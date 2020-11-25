@@ -7,6 +7,10 @@ A fast Instagram Scraper based on Torpy. Scrapes posts for multiple hashtags and
 
 *Requirements: [Torpy](https://github.com/torpyorg/torpy) package installed but no login and no API-Key. Working for all OS.*
 
+## Command Line Version
+![Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper/blob/main/fast-instagram-scraper-cli.gif)
+
+## Jupyter Version
 ![Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper/blob/main/Fast%20Instagram%20Scraper.gif)
 
 For this scraper I had the same motivation as for [Simple Instagram Scraper](https://github.com/do-me/Simple-Instagram-Scraper):
