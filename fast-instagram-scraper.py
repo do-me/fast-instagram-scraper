@@ -58,6 +58,7 @@ def delete_keys(f_node):
 
 # adds (redundant) location information to every post
 def add_location_data(l_node):
+    global ploc
     l_node["location_id"] = ploc["id"]
     l_node["location_name"] = ploc["name"]
     l_node["location_slug"] = ploc["slug"]
@@ -72,11 +73,13 @@ def add_locations_data_to_cleaned_node(nodelist, just_clean = False):
     else:
         nodelist = [add_location_data(delete_keys(i["node"])) for i in nodelist] # chained functions and list comprehension
         return nodelist
-        
+
+ploc = None
+
 total_posts = 0
 # main scraping function
 def torsession(first_iter = False):
-    global last_cursor, this_cursor, post_list, run_number, total_posts
+    global last_cursor, this_cursor, post_list, run_number, total_posts, ploc
     
     if first_iter:
         last_cursor = ""
