@@ -1,5 +1,5 @@
 # Fast Instagram Scraper
-v1.2.0
+v1.2.1
 
 ## Jupyter and fully functional command line version available! 
 
