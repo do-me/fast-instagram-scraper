@@ -21,6 +21,7 @@ import datetime
 from tqdm import tqdm # progress bar
 from IPython.display import display, Markdown # for nicer printing
 import argparse
+from func_timeout import func_timeout, FunctionTimedOut
 
 # just in the beginning: define empty variables
 # IMPORTANT: when pausing (=interrupting jupyter) and resuming do not execute this cell! 
@@ -145,7 +146,7 @@ def torsession(first_iter = False):
                 # return completely if no more page available (has_next_page: False)
                 if not edge_to_media["page_info"]["has_next_page"]:
                     if len(post_list) < max_posts:
-                        print("Maybe you scraped too fast. Try setting a higher wait_between_requests")
+                        print("Maybe you scraped too fast. Try setting a higher wait_between_requests.")
                         return "no_more_page"
                     else:
                         return "no_more_page"
@@ -153,6 +154,7 @@ def torsession(first_iter = False):
                 # just in case above doesn't work: compare this and last cursor
                 this_cursor = edge_to_media["page_info"]["end_cursor"]
                 if this_cursor == last_cursor:
+                    print("Last two cursors are the same ({}), finishing.".format(this_cursor))
                     return "no_more_page"
 
                 last_cursor = this_cursor  
@@ -170,16 +172,21 @@ def scrape():
     while ii < max_tor_renew:
         print("Initiating tor session {}".format(ii))
         
+        first_iter_loopvar = False
         # for the first iteration hand over empty last_cursor
         if ii == 0: 
-            if torsession(first_iter = True) == "no_more_page": 
+            first_iter_loopvar = True
+
+        # timeout try/except with https://github.com/kata198/func_timeout
+        try:
+            if func_timeout(tor_timeout, torsession, args=[first_iter_loopvar]) == "no_more_page": 
                 print("Mined {} from {} total posts.".format(len(post_list),total_posts))
                 break
-            
-        else:           
-            if torsession() == "no_more_page": 
-                print("Mined {} from {} total posts.".format(len(post_list),total_posts))
-                break
+        except FunctionTimedOut:
+            print ("Torsession terminated after {} seconds tor_timeout.".format(tor_timeout))
+        except Exception as e:
+            print(e)
+
         ii += 1
 
 # Instantiate the parser
@@ -198,6 +205,8 @@ parser.add_argument('--wait_between_requests', type=int, help='Waiting time betw
 parser.add_argument('--max_tor_renew', type=int, help='Max number of new tor sessions', default=100000)
 parser.add_argument('--run_number', type=str, help='Additional file name part like "_v2" for "1234567_v2.csv"', default="")
 parser.add_argument('--location_or_hashtag_list', type=str, help='For heterogenous hashtag/location list scraping only: provide another list with "hashtag","location",...', default="")
+parser.add_argument('--tor_timeout', type=int, help='Set tor timeout when tor session gets blocked for some reason (default 600 seconds)', default=600)
+
 # Optional true/false
 parser.add_argument('--list', action='store_true', help='Scrape for list')
 parser.add_argument('--last_cursor', action='store_true', help='Continue from last cursor')
@@ -217,6 +226,7 @@ if __name__ == "__main__":
     wait_between_requests = args.wait_between_requests # time in seconds to wait for next requests adding up to normal execution time ~ 4-8 seconds
     max_tor_renew = args.max_tor_renew # maximum number of new tor sessions
     run_number = args.run_number # will be added to filename; useful for pausing and resuming, see comment in cell5
+    tor_timeout = args.tor_timeout
 
     # standard scrape for location or hashtag
     if not args.list: 
