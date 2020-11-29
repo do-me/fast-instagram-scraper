@@ -58,6 +58,7 @@ Optional Arguments:
   --location_or_hashtag_list  For heterogenous hashtag/location list scraping only: provide another list with hashtag,location,...
   --list                      Scrape for list
   --last_cursor               Continue from where you quit before (last_cursor)
+  --tor_timeout               Set tor timeout when tor session gets blocked for some reason (default 600 seconds)
 ```  
 Example commands:
 ```
