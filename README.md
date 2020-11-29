@@ -72,6 +72,89 @@ Example commands:
 ```
 For the last command hashtag argument is a fallback in case the list passed after is not valid. If --location_or_hashtag_list is valid hashtag will be overwritten by the respective value.
 
+## Parallelizing 
+You can run several parallel tor sessions and hence run multiple instances of Fast Instagram Scraper. Let's say you have a list of location IDs and want to get few posts of every location. When running the script sequentially, it will mine one location after another. 
+You can easily parallelize it by spawning multiple shells. For Powershell you could generate your commands in Python: 
+``` python
+location_list = [1234567,1234564567,1234578765432]
+for i in location_list:
+    print("start powershell {python fast-instagram-scraper.py " + str(i) + " location --max_posts 500};")
+    
+# Result
+start powershell {python fast-instagram-scraper.py 1234567 location --max_posts 500};
+start powershell {python fast-instagram-scraper.py 1234564567 location --max_posts 500};
+start powershell {python fast-instagram-scraper.py 1234578765432 location --max_posts 500};
+```
+Copy paste these commands in a new Powershell window and execute. The locations will be mined and the Powershell windows closed when finished. 
+Note: Could be also done with jobs running in the background.
+
+Of course you shouldn't spawn an infinite amount of new processes. For a longer list of locations (i.e. 1000) the recommended method is to chunk your list so you can parallel processes sequential commands. The following example is a list of 60 location IDs chunked into 15 processes of each 4 locations to scrape. 
+
+``` python
+location_list = [1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432,1234567,1234564567,1234578765432]
+
+# chunking function
+def chunks(lst, n): # https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+        
+location_chunks = list(chunks(location_list,4))
+location_chunks
+
+# Result is a list of 15 lists with each 4 locations
+[[1234567, 1234564567, 1234578765432, 1234567],
+ [1234564567, 1234578765432, 1234567, 1234564567],
+ [1234578765432, 1234567, 1234564567, 1234578765432],
+ [1234567, 1234564567, 1234578765432, 1234567],
+ [1234564567, 1234578765432, 1234567, 1234564567],
+ [1234578765432, 1234567, 1234564567, 1234578765432],
+ [1234567, 1234564567, 1234578765432, 1234567],
+ [1234564567, 1234578765432, 1234567, 1234564567],
+ [1234578765432, 1234567, 1234564567, 1234578765432],
+ [1234567, 1234564567, 1234578765432, 1234567],
+ [1234564567, 1234578765432, 1234567, 1234564567],
+ [1234578765432, 1234567, 1234564567, 1234578765432],
+ [1234567, 1234564567, 1234578765432, 1234567],
+ [1234564567, 1234578765432, 1234567, 1234564567],
+ [1234578765432, 1234567, 1234564567, 1234578765432]]
+
+```
+Each list of 4 locations will now be put into a Fast Instagram Scraper sequential command which will be executed in a new Powershell window. 
+
+```python
+for i in location_chunks:
+    outcmd = ""
+    outcmd = "start powershell {"
+    pyth= ""
+    for loc in i:
+        pyth = pyth +"python fast-instagram-scraper.py " + str(loc) + " location --max_posts 500;"
+    outcmd = outcmd + pyth + "};"
+    print(outcmd)
+    
+# Result
+start powershell {python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;};
+start powershell {python fast-instagram-scraper.py 1234578765432 location --max_posts 500;python fast-instagram-scraper.py 1234567 location --max_posts 500;python fast-instagram-scraper.py 1234564567 location --max_posts 500;python fast-instagram-scraper.py 1234578765432 location --max_posts 500;};
+```
+Same as above: Copy paste these commands in a new Powershell window and execute. The locations will be mined and the Powershell windows closed when finished. 
+
+You can raise the chunk size according to your system but be polite and don't exaggerate as it might affect the tor network. 
+
+However, if for example you would like to visualize the approximately 1000 location IDs Instagram is displaying for each city of a country under https://www.instagram.com/explore/locations you could do this quite fast by first [mining the location IDs as described in my blog post](https://geo.rocks/post/mining-locations-ids/) in two simple steps with javascript and after chunking the locations i.e. to 20 chunks of 50 loctions. Limit the max_posts parameter to a low number (technically anything between 1 and 50 will have the same effect) i.e. 20 and go for it! Depending on your luck with good tor connections you'll be done in around 10-20 minutes! 
+
 ## To Do
 - Fix progress bar (might be tqdm.notebook bug related) and set up logfile
 - Optionally change saving logic
