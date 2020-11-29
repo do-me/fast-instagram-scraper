@@ -72,8 +72,6 @@ For the last command hashtag argument is a fallback in case the list passed afte
 
 ## To Do
 - Fix progress bar (might be tqdm.notebook bug related) and set up logfile
-- Set timeout function for torpy connection (occasionally gets stuck) 
-- Work with torpy session pool 
 - Optionally change saving logic
 
 ## More
