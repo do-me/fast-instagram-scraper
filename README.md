@@ -30,6 +30,8 @@ Particularly in comparison to this scraper it's too slow and struggles with gett
 [Torpy](https://github.com/torpyorg/torpy) makes use of the tor network to request pages.
 Install torpy with: `pip3 install torpy` or `pip install torpy`. If you like Torpy and enjoy Fast Instagram Scraper consider giving a ⭐ or donating to https://donate.torproject.org/
 
+The Torpy-logic applied here unfortunately doesn't work to scrape all post information as one needs to be logged in. The amount of requests will be associated with the account which gets blocked no matter where from.
+
 ## Idea
 Use one tor end node to get as many requests as possible. Experience tells: a normal end node can do 15-40 requests (each one 50 posts) waiting around 10 seconds each time. Let's do the math: if you got a good node, you'll get 40x50 posts in 400 seconds which gives you a rate of 5 posts per second or even faster if you just want to <500 posts.
 
