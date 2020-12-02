@@ -156,7 +156,27 @@ Same as above: Copy paste these commands in a new Powershell window and execute.
 
 You can raise the chunk size according to your system but be polite and don't exaggerate as it might affect the tor network. 
 
-However, if for example you would like to visualize the approximately 1000 location IDs Instagram is displaying for each city of a country under https://www.instagram.com/explore/locations you could do this quite fast by first [mining the location IDs as described in my blog post](https://geo.rocks/post/mining-locations-ids/) in two simple steps with javascript and after chunking the locations i.e. to 20 chunks of 50 loctions. Limit the max_posts parameter to a low number (technically anything between 1 and 50 will have the same effect) i.e. 20 and go for it! Depending on your luck with good tor connections you'll be done in around 10-20 minutes! 
+However, if for example you would like to visualize the approximately 1000 location IDs Instagram is displaying for each city of a country under https://www.instagram.com/explore/locations you could do this quite fast by first [mining the location IDs as described in my blog post](https://geo.rocks/post/mining-locations-ids/) in two simple steps with javascript and after chunking the locations i.e. to 20 chunks of 50 locations. Limit the max_posts parameter to a low number (technically anything between 1 and 50 will have the same effect) i.e. 20 and go for it! Depending on your luck with good tor connections you'll be done in around 10-20 minutes! 
+
+## Recommendation for mining all posts from one location ID or hashtag 
+When mining for locations or hashtags with a vast amount of posts it might be better to scrape with multiple commands by using --last_cursor instead of mining everything in one go. At the moment the saving logic append all JSON data to a list, converts it to csv and saves the entire file which becomes quite inefficient for big files. 
+However mining in smaller chunks has more advantages so just go i.e. for maximum 20000 - 50000 posts resulting in 16 - 38 mb files each. In my case one iteration (including the cost efficient saving process) was still executed in a reasonable amount of time (<15 seconds). For the very first iteration mine normally. After don't forget the --last_cursor flag. A timeout of 200 seconds per iteration proved to work well. Chaining commands with a semicolon for Powershell and bash helps to keep the process going i.e.:
+```bash
+python fast-instagram-scraper.py 123456789987 location --max_posts 20000;
+python fast-instagram-scraper.py 123456789987 location --max_posts 20000 --last_cursor --tor_timeout 200;
+python fast-instagram-scraper.py 123456789987 location --max_posts 20000 --last_cursor --tor_timeout 200;
+# and so on ...
+```
+
+## CSV concatination 
+Use a simple Powershell command to concat all your freshly mined csv files. Manually create a folder "merged" first and execute this command:
+```powershell
+Get-ChildItem -Filter *.csv | Select-Object -ExpandProperty FullName | Import-Csv  -Encoding UTF8| Export-Csv .\merged\merged.csv -NoTypeInformation -Append -Encoding UTF8
+```
+
+## Data preprocessing 
+See the [jupyter notebook in this repo](https://github.com/do-me/fast-instagram-scraper/blob/main/A%20complete%20guide%20to%20preprocess%20Instagram%20post%20data%20mined%20with%20Fast%20Instagram%20Scraper.ipynb) to preprocess all the post data with pandas and create a geodataframe with geopandas for visualizing in ordinary GIS programs such as QGIS. 
+Hashtag extraction, reprojetion in web mercator (EPSG:3857) and unique points filter included.
 
 ## To Do
 - Fix progress bar (might be tqdm.notebook bug related) and set up logfile
@@ -164,4 +184,4 @@ However, if for example you would like to visualize the approximately 1000 locat
 
 ## More
 - [Blog article](https://geo.rocks/post/fast-instagram-scraper/) about Fast Instagram Scraper
-- Find me on [my blog](https://geo.rocks)!
+- Find me and stay tuned on [my blog](https://geo.rocks)!
