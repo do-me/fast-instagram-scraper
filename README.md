@@ -182,11 +182,11 @@ However, if for example you would like to visualize the approximately 1000 locat
 
 ## Recommendation for mining all posts from one location ID or hashtag 
 When mining for locations or hashtags with a vast amount of posts it might be better to scrape with multiple commands by using --last_cursor instead of mining everything in one go. At the moment the saving logic append all JSON data to a list, converts it to csv and saves the entire file which becomes quite inefficient for big files. 
-However mining in smaller chunks has more advantages so just go i.e. for maximum 20000 - 50000 posts resulting in 16 - 38 mb files each. In my case one iteration (including the cost efficient saving process) was still executed in a reasonable amount of time (<15 seconds). For the very first iteration mine normally. After don't forget the --last_cursor flag. A timeout of 200 seconds per iteration proved to work well. Chaining commands with a semicolon for Powershell and bash helps to keep the process going i.e.:
+However mining in smaller chunks has more advantages so just go i.e. for maximum 20000 - 50000 posts resulting in 16 - 38 mb files each. In my case one iteration (including the cost efficient saving process) was still executed in a reasonable amount of time (<15 seconds). For the very first iteration mine normally. After don't forget the --last_cursor flag. A timeout of 600 seconds per iteration (default) proved to work well. Chaining commands with a semicolon for Powershell and bash helps to keep the process going i.e.:
 ```bash
 python fast-instagram-scraper.py 123456789987 location --max_posts 20000;
-python fast-instagram-scraper.py 123456789987 location --max_posts 20000 --last_cursor --tor_timeout 200;
-python fast-instagram-scraper.py 123456789987 location --max_posts 20000 --last_cursor --tor_timeout 200;
+python fast-instagram-scraper.py 123456789987 location --max_posts 20000 --last_cursor;
+python fast-instagram-scraper.py 123456789987 location --max_posts 20000 --last_cursor;
 # and so on ...
 ```
 
