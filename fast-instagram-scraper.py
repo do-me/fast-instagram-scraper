@@ -13,7 +13,6 @@ Release: 22.11.2020
 # install torpy, tqdm and pandas before
 from torpy.http.requests import TorRequests
 import json
-from pandas.io.json import json_normalize
 import requests
 import time
 import pandas as pd
@@ -79,11 +78,8 @@ ploc = None
 
 total_posts = 0
 # main scraping function
-def torsession(first_iter = False):
+def torsession():
     global last_cursor, this_cursor, post_list, run_number, total_posts, ploc
-    
-    if first_iter:
-        last_cursor = ""
     
     with TorRequests() as tor_requests:
         with tor_requests.get_session() as sess, tqdm(total=0) as pbar:
@@ -94,7 +90,7 @@ def torsession(first_iter = False):
                 print("Start iteration {}: {}".format(i,datetime.datetime.now()))
 
                 # saves all posts as csv for every iteration, 50 at once
-                pf = json_normalize(post_list)
+                pf = pd.json_normalize(post_list)
                 
                 file_name = "{}{}{}.csv".format(out_dir, object_id_or_string, run_number)
                 pf.to_csv(file_name, index=False)
@@ -172,14 +168,9 @@ def scrape():
     while ii < max_tor_renew:
         print("Initiating tor session {}".format(ii))
         
-        first_iter_loopvar = False
-        # for the first iteration hand over empty last_cursor
-        if ii == 0: 
-            first_iter_loopvar = True
-
         # timeout try/except with https://github.com/kata198/func_timeout
         try:
-            if func_timeout(tor_timeout, torsession, args=[first_iter_loopvar]) == "no_more_page": 
+            if func_timeout(tor_timeout, torsession) == "no_more_page": 
                 print("Mined {} from {} total posts.".format(len(post_list),total_posts))
                 break
         except FunctionTimedOut:
@@ -227,6 +218,7 @@ if __name__ == "__main__":
     max_tor_renew = args.max_tor_renew # maximum number of new tor sessions
     run_number = args.run_number # will be added to filename; useful for pausing and resuming, see comment in cell5
     tor_timeout = args.tor_timeout
+    last_cursor = "" # set globally to "", will be overwritten 
 
     # standard scrape for location or hashtag
     if not args.list: 
