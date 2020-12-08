@@ -18,7 +18,6 @@ import time
 import pandas as pd
 import datetime
 from tqdm import tqdm # progress bar
-from IPython.display import display, Markdown # for nicer printing
 import argparse
 from func_timeout import func_timeout, FunctionTimedOut
 
