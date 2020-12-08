@@ -7,7 +7,7 @@ A fast Instagram Scraper based on Torpy. Scrapes posts for multiple hashtags and
 
 *Requirements: [Torpy](https://github.com/torpyorg/torpy) package installed but no login and no API-Key. Working for all OS.*
 
-*Update December 2020*: when scraping for hashtags, it will take just slightly longer as Instagram blocks Tor end nodes for hashtags faster than for location IDs.
+*Update December 2020*: Seems like some people are actively using this tool, so the chances to get a blocked end node rise. Anyway still working fine.
 
 ## Command Line Version
 ![Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper/blob/main/fast-instagram-scraper-cli.gif)
