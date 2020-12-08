@@ -88,15 +88,6 @@ def torsession():
             
             while i < max_requests: # enter main loop
                 print("Start iteration {}: {}".format(i,datetime.datetime.now()))
-
-                # saves all posts as csv for every iteration, 50 at once
-                pf = pd.json_normalize(post_list)
-                
-                file_name = "{}{}{}.csv".format(out_dir, object_id_or_string, run_number)
-                pf.to_csv(file_name, index=False)
-                print("File saved.")
-            
-                time.sleep(wait_between_requests) # take a nap
                               
                 try: 
                     ireq = sess.get(ilink(cursor = last_cursor)) # fire request
@@ -132,8 +123,25 @@ def torsession():
                     
                 post_list.extend(ipage) # extend list with all posts (50 every time)
                 pbar.update(len(ipage))
+
+                # saves all posts as csv for every iteration, 50 at once
+                pf = pd.json_normalize(post_list)
                 
-                print("Succesfully appended iteration: {}".format(i))
+                file_name = "{}{}{}.csv".format(out_dir, object_id_or_string, run_number)
+                pf.to_csv(file_name, index=False)
+                print("File saved: iteration: {}".format(i))
+
+                this_cursor = edge_to_media["page_info"]["end_cursor"] # this_cursor is next page cursor means unscraped page
+
+                # compare this and last cursor, just in case
+                if this_cursor == last_cursor:
+                    print("Last two cursors are the same ({}), finishing.".format(this_cursor))
+                    return "no_more_page"
+
+                # for --last_cursor, long pause or jupyter shutdown: saves only the last cursor
+                open("{}{}_last_cursor.txt".format(out_dir,object_id_or_string), 'a').write(this_cursor+"\n") 
+                # alternatively just print last_cursor for every iteration
+                # print(this_cursor)
                 
                 if len(post_list) > max_posts:
                     print("Maximum number of posts scraped:{}".format(len(post_list)))
@@ -146,21 +154,11 @@ def torsession():
                         return "no_more_page"
                     else:
                         return "no_more_page"
-                
-                # just in case above doesn't work: compare this and last cursor
-                this_cursor = edge_to_media["page_info"]["end_cursor"]
-                if this_cursor == last_cursor:
-                    print("Last two cursors are the same ({}), finishing.".format(this_cursor))
-                    return "no_more_page"
 
                 last_cursor = this_cursor  
                 
-                # for long pause and jupyter shutdown: saves only the last cursor
-                open("{}{}_last_cursor.txt".format(out_dir,object_id_or_string), 'a').write(last_cursor+"\n")
-                # alternatively just print last_cursor for every iteration
-                # print(last_cursor)
-                
                 i+=1   
+                time.sleep(wait_between_requests) # take a nap
 
 # main loop
 def scrape():
