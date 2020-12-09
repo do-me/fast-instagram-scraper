@@ -43,7 +43,7 @@ For command line, you can call an [example command](https://github.com/do-me/fas
 
 
 ## Why not [Simple Instagram Scraper](https://github.com/do-me/Simple-Instagram-Scraper)?
-[Simple Instagram Scraper](https://github.com/do-me/Simple-Instagram-Scraper) can mine all of a post's information - technically everything being displayed on the page or in the DOM including location and accessibility caption. As it's literally looking at each post and needs to bahave like a human in order not to get blocked it needs to be relatively slow (a couple of seconds per post, depending on your parameters). [Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper) aims at mining at scale but can only do so by accessing Instagram's JSON objects which come in batches of 50 posts and unfortunately do not include some information such as location and accessibility caption.
+[Simple Instagram Scraper](https://github.com/do-me/Simple-Instagram-Scraper) can mine all of a post's information - technically everything being displayed on the page or in the DOM including location and accessibility caption. As it's literally looking at each post and needs to bahave like a human in order not to get blocked it needs to be relatively slow (a couple of seconds per post, depending on your parameters). [Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper) aims at mining at scale but can only do so by accessing Instagram's JSON objects which come in batches of 50 (for hashtags) or ca. 150 (for locations) posts and unfortunately do not include some information such as location and accessibility caption.
 
 ### Scraper Comparison
 |Scraper|Pro|Con|
