@@ -86,6 +86,7 @@ Optional Arguments:
   --list                      Scrape for list
   --last_cursor               Continue from where you quit before (last_cursor)
   --tor_timeout               Set tor timeout when tor session gets blocked for some reason (default 600 seconds)
+  --user_agent                Change user agent if needed
 ```  
 Example commands:
 ```
