@@ -80,6 +80,10 @@ total_posts = 0
 def torsession():
     global last_cursor, this_cursor, post_list, run_number, total_posts, ploc
     
+    # Set user agent, i.e. from https://techblog.willshouse.com/2012/01/03/most-common-user-agents/
+    headers = {}
+    headers['User-agent'] = user_agent
+
     with TorRequests() as tor_requests:
         with tor_requests.get_session() as sess, tqdm(total=0) as pbar:
             print("Circuit built.") # conncection works
@@ -89,7 +93,7 @@ def torsession():
                 print("Start iteration {}: {}".format(i,datetime.datetime.now()))
                               
                 try: 
-                    ireq = sess.get(ilink(cursor = last_cursor)) # fire request
+                    ireq = sess.get(ilink(cursor = last_cursor),headers = headers) # fire request
                     idata = ireq.json() # get data from page as json
                     
                 except:
@@ -194,6 +198,7 @@ parser.add_argument('--max_tor_renew', type=int, help='Max number of new tor ses
 parser.add_argument('--run_number', type=str, help='Additional file name part like "_v2" for "1234567_v2.csv"', default="")
 parser.add_argument('--location_or_hashtag_list', type=str, help='For heterogenous hashtag/location list scraping only: provide another list with "hashtag","location",...', default="")
 parser.add_argument('--tor_timeout', type=int, help='Set tor timeout when tor session gets blocked for some reason (default 600 seconds)', default=600)
+parser.add_argument('--user_agent', type=str, help='Change user agent if needed', default="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36")
 
 # Optional true/false
 parser.add_argument('--list', action='store_true', help='Scrape for list')
@@ -216,6 +221,7 @@ if __name__ == "__main__":
     run_number = args.run_number # will be added to filename; useful for pausing and resuming, see comment in cell5
     tor_timeout = args.tor_timeout
     last_cursor = "" # set globally to "", will be overwritten 
+    user_agent = args.user_agent
 
     # standard scrape for location or hashtag
     if not args.list: 
