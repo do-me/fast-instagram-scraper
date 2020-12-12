@@ -102,6 +102,9 @@ def torsession():
             
             while i < max_requests: # enter main loop
                 print("Start iteration {}: {}".format(i,datetime.datetime.now()))
+                import pdb
+                from pdb import set_trace as bp
+                bp()
                               
                 try: 
                     ireq = sess.get(ilink(cursor = last_cursor),headers = headers) # fire request
@@ -150,6 +153,10 @@ def torsession():
                 # compare this and last cursor, just in case
                 if this_cursor == last_cursor:
                     print("Last two cursors are the same ({}), finishing.".format(this_cursor))
+                    return "no_more_page"
+
+                if not edge_to_media["page_info"]["has_next_page"] and this_cursor == None:
+                    print("Successfully scraped until last page for {}".format(object_id_or_string))
                     return "no_more_page"
 
                 # for --last_cursor, long pause or jupyter shutdown: saves only the last cursor
@@ -292,7 +299,7 @@ if __name__ == "__main__":
         # by passing "hashtag" or "location" in location_or_hashtag_list
 
         # main parameters 
-        scrape_items_list = str_list_parser(args.object_id_or_string) # ["justdoit","truckfonalddump"]
+        scrape_items_list = str_list_parser(object_id_or_string) # ["justdoit","truckfonalddump"]
 
         # scraping for heterogenous values (locatoin and hashtags) use as below
         # scrape_items_list = ["12345678","justdoit"]
