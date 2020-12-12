@@ -41,7 +41,7 @@ For jupyter start the notebook in your cloned repo:
 ```
 jupyter notebook
 ```
-For command line, you can call an [example command](https://github.com/do-me/fast-instagram-scraper#command-line-version-1) now.
+For command line, you can call an [example command](https://github.com/do-me/fast-instagram-scraper#command-line-version-1).
 
 
 ## Why not [Simple Instagram Scraper](https://github.com/do-me/Simple-Instagram-Scraper)?
