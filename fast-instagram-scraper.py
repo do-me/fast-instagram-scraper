@@ -8,11 +8,13 @@
 https://github.com/do-me/fast-instagram-scraper
 Author: do-me
 Release: 22.11.2020
+v1.2.2
 """
 
 # install torpy, tqdm and pandas before
 from torpy.http.requests import TorRequests
 import json
+import re
 import requests
 import time
 import pandas as pd
@@ -72,6 +74,15 @@ def add_locations_data_to_cleaned_node(nodelist, just_clean = False):
     else:
         nodelist = [add_location_data(delete_keys(i["node"])) for i in nodelist] # chained functions and list comprehension
         return nodelist
+
+# "berlin,999111555,[1234567,hamburg],[munich,cologne]" -> ['berlin', '999111555', '[1234567,hamburg]', '[munich,cologne]']
+# "111,222,333" -> ['111', '222', '333']
+def str_list_parser(raw_str_in):
+    raw_str_in_lists = re.findall('\[.*?\]',raw_str_in)
+    in_items = re.sub("[\(\[].*?[\)\]]", "", raw_str_in)
+    in_items = in_items.split(",")
+    parsed = [i for i in in_items if i != ""] +raw_str_in_lists
+    return parsed
 
 ploc = None
 
@@ -183,12 +194,13 @@ def scrape():
 
 # Instantiate the parser
 parser = argparse.ArgumentParser(description="""
-Fast Instagram Scraper v1.2.0 https://github.com/do-me/fast-instagram-scraper
+Fast Instagram Scraper v1.2.2 https://github.com/do-me/fast-instagram-scraper
 """)
 
 # Required positional arguments
 parser.add_argument('object_id_or_string', type=str, help='Location id or hashtag like 12345678 or truckfonalddump. If --list, enter the item list here comma separated like loveyourlife,justdoit,truckfonalddump')
 parser.add_argument('location_or_hashtag', type=str, help='Must be location or hashtag')
+
 # Optional arguments
 parser.add_argument('--out_dir', type=str, help='Path to store csv like /.../scrape/', default="")
 parser.add_argument('--max_posts', type=int, help='Limit posts to scrape',default=10000000)
@@ -199,6 +211,7 @@ parser.add_argument('--run_number', type=str, help='Additional file name part li
 parser.add_argument('--location_or_hashtag_list', type=str, help='For heterogenous hashtag/location list scraping only: provide another list with "hashtag","location",...', default="")
 parser.add_argument('--tor_timeout', type=int, help='Set tor timeout when tor session gets blocked for some reason (default 600 seconds)', default=600)
 parser.add_argument('--user_agent', type=str, help='Change user agent if needed', default="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36")
+parser.add_argument('--threads', type=int, help='Change the number of threads. Each thread has a different tor end node when scraping for list.', default=1)
 
 # Optional true/false
 parser.add_argument('--list', action='store_true', help='Scrape for list')
@@ -209,8 +222,8 @@ args = parser.parse_args()
 if __name__ == "__main__":
 
     # main parameters 
-    location_or_hashtag = args.location_or_hashtag # location or hashtag
-    object_id_or_string = args.object_id_or_string # "1034863903" # a string for hashtag an int for location id i.e. 12345678
+    location_or_hashtag = args.location_or_hashtag # location or hashtag, or list
+    object_id_or_string = args.object_id_or_string # "1034863903" # a string for hashtag an int for location id i.e. 12345678 or list
     max_posts = args.max_posts # maximum number of posts to scrape
     out_dir = args.out_dir # directory to save csv file
 
@@ -220,8 +233,45 @@ if __name__ == "__main__":
     max_tor_renew = args.max_tor_renew # maximum number of new tor sessions
     run_number = args.run_number # will be added to filename; useful for pausing and resuming, see comment in cell5
     tor_timeout = args.tor_timeout
-    last_cursor = "" # set globally to "", will be overwritten 
     user_agent = args.user_agent
+    threads_no = args.threads
+
+    last_cursor = "" # set globally to "", will be overwritten 
+
+    # runs subprocesses
+    if threads_no != 1:
+        if threads_no < 1:
+            raise RuntimeError('Threads number must be > 1') 
+        else:
+            from multiprocessing.pool import ThreadPool
+            import subprocess
+            import sys
+
+            def scrape_subprocess(one_obj):
+                # time.sleep(x) # Wait 2 seconds
+                #print("Process: {}".format(one_obj))
+                print(one_obj)
+                time.sleep(1)
+
+                cli_line = 'python fast-instagram-scraper.py "{}" {} --max_posts {} --max_requests {} --wait_between_requests {} --max_tor_renew {} --tor_timeout {} --user_agent "{}"'.format(one_obj, location_or_hashtag,max_posts,max_requests,wait_between_requests, max_tor_renew,tor_timeout,user_agent)
+
+                if args.last_cursor:
+                    cli_line += " --last_cursor"
+                if run_number != "":
+                    cli_line += " --run_number {}".format(run_number)
+                if out_dir != "":
+                    cli_line += " --out_dir {}".format(out_dir)
+                if isinstance(one_obj, list): 
+                    cli_line += " --list"
+
+                subprocess.run(cli_line)
+                #print(cli_line)
+                    
+            p = ThreadPool(threads_no)
+
+            p.map(scrape_subprocess, str_list_parser(args.object_id_or_string))
+            p.close()
+            sys.exit()
 
     # standard scrape for location or hashtag
     if not args.list: 
@@ -235,14 +285,14 @@ if __name__ == "__main__":
         else: 
             scrape()
 
-    # Scrape multiple hashtags and/or location ids
+    # Scrape multiple hashtags and/or location ids (list)
     else:
         # technically just iterating through scrape_items_list and executes scrape() for every item with new variables
         # it is possible to scrape for both location ids and hashtags at the same time 
         # by passing "hashtag" or "location" in location_or_hashtag_list
 
         # main parameters 
-        scrape_items_list = args.object_id_or_string.split(",") # ["justdoit","truckfonalddump"]
+        scrape_items_list = str_list_parser(args.object_id_or_string) # ["justdoit","truckfonalddump"]
 
         # scraping for heterogenous values (locatoin and hashtags) use as below
         # scrape_items_list = ["12345678","justdoit"]
