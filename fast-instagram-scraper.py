@@ -101,11 +101,7 @@ def torsession():
             i = 0
             
             while i < max_requests: # enter main loop
-                print("Start iteration {}: {}".format(i,datetime.datetime.now()))
-                import pdb
-                from pdb import set_trace as bp
-                bp()
-                              
+                print("Start iteration {}: {}".format(i,datetime.datetime.now()))                             
                 try: 
                     ireq = sess.get(ilink(cursor = last_cursor),headers = headers) # fire request
                     idata = ireq.json() # get data from page as json
