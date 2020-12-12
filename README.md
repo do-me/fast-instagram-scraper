@@ -3,11 +3,13 @@ v1.2.1
 
 ## Jupyter and fully functional command line version available! 
 
-A fast Instagram Scraper based on Torpy. Scrapes posts for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) at once.
+A fast Instagram Scraper based on Torpy. Scrapes post metadata for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) sequentially, concurrently or combined. Multithreading supported.
 
 *Requirements: [Torpy](https://github.com/torpyorg/torpy) package installed but no login and no API-Key. Working for all OS.*
 
-*Update December 2020*: Seems like some people are actively using this tool, so the chances to get a blocked end node rise. Still working fine but please use responsibly and respect Instagram's terms of use. Hashtags will be mined around 4-5 times faster due to larger batches even though Tor end nodes get blocked more often than for location IDs.
+Please use responsibly and respect Instagram's terms of use! If you enjoy Fast Instagram Scraper consider giving a ⭐
+
+*Update December 2020*: Hashtags will be mined around 4-5 times faster due to larger batches even though Tor end nodes get blocked more often than for location IDs.
 
 ## Command Line Version
 ![Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper/blob/main/fast-instagram-scraper-cli.gif)
@@ -53,7 +55,7 @@ For command line, you can call an [example command](https://github.com/do-me/fas
 
 ## Torpy
 [Torpy](https://github.com/torpyorg/torpy) makes use of the tor network to request pages.
-Install torpy with: `pip3 install torpy` or `pip install torpy`. If you like Torpy and enjoy Fast Instagram Scraper consider giving a ⭐ or donating to https://donate.torproject.org/
+Install torpy with: `pip3 install torpy` or `pip install torpy`. If you like Torpy consider giving a ⭐ or donating to https://donate.torproject.org/
 
 The Torpy-logic applied here unfortunately doesn't work to scrape all post information as one needs to be logged in. The amount of requests will be associated with the account which gets blocked no matter where from. Hence Torpy cannot be used for [Simple Instagram Scraper](https://github.com/do-me/Simple-Instagram-Scraper).
 
@@ -62,6 +64,7 @@ Use one tor end node to get as many requests as possible. Experience tells: a no
 
 ## Jupyter Version
 You will find detailed information in the notebook.
+All future improvements will be available only for the command line version.
 
 ## Command Line Version 
 
@@ -87,6 +90,7 @@ Optional Arguments:
   --last_cursor               Continue from where you quit before (last_cursor)
   --tor_timeout               Set tor timeout when tor session gets blocked for some reason (default 600 seconds)
   --user_agent                Change user agent if needed
+  --threads                   Number of concurrent threads
 ```  
 Example commands:
 ```
@@ -98,7 +102,22 @@ Example commands:
 ```
 For the last command hashtag argument is a fallback in case the list passed after is not valid. If --location_or_hashtag_list is valid hashtag will be overwritten by the respective value.
 
-## Parallelizing 
+## Multithreading 🐙
+Fast Instagram Scraper supports multithreading. Each thread has a different tor end node. Don't use the --list flag when multithreading. 
+A basic example for 3 threads would look like this:
+```
+python fast-instagram-scraper.py byebyedonald,hellohereIam,georocks hashtag --threads 3
+```
+All hashtags will be mined concurrently. The shell output will get quite messy as the threads' outputs will be printed in just one shell.🦥
+
+If you would like to have 3 concurrent threads with each 4 sequential commands pass lists. Each list runs on one thread with the parameters provided:
+```
+python fast-instagram-scraper.py byebyedonald,hellohereIam,[hereiam,goodlife,geography] hashtag --threads 3
+```
+You can use all arguments as definded above like `--last_cursor`.
+
+## Parallelizing 👷‍♀️ 👷‍♂️
+The above method is the preferred way to mine simultanously for several hashtags/locations. If however you would like to monitor every process in a shell, do as follows.
 You can run several parallel tor sessions and hence run multiple instances of Fast Instagram Scraper. Let's say you have a list of location IDs and want to get few posts of every location. When running the script sequentially, it will mine one location after another. 
 You can easily parallelize it by spawning multiple shells. For Powershell you could generate your commands in Python: 
 ``` python
