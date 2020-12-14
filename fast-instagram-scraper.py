@@ -90,6 +90,11 @@ total_posts = 0
 # main scraping function
 def torsession():
     global last_cursor, this_cursor, post_list, run_number, total_posts, ploc
+
+    # catch last cuursor if empty
+    if last_cursor == "Last_Cursor_empty":
+        print("Last cursor was empty for {}. Can't scrape further.".format(object_id_or_string))
+        return "no_more_page"
     
     # Set user agent, i.e. from https://techblog.willshouse.com/2012/01/03/most-common-user-agents/
     headers = {}
@@ -101,7 +106,12 @@ def torsession():
             i = 0
             
             while i < max_requests: # enter main loop
-                print("Start iteration {}: {}".format(i,datetime.datetime.now()))                             
+                print("Start iteration {}: {}".format(i,datetime.datetime.now()))   
+
+                if last_cursor == "Last_Cursor_empty":
+                    print("Last cursor was empty for {}. Can't scrape further.".format(object_id_or_string))
+                    return "no_more_page"
+
                 try: 
                     ireq = sess.get(ilink(cursor = last_cursor),headers = headers) # fire request
                     idata = ireq.json() # get data from page as json
@@ -146,13 +156,22 @@ def torsession():
 
                 this_cursor = edge_to_media["page_info"]["end_cursor"] # this_cursor is next page cursor means unscraped page
 
+                # catch all versions of "no more page available"
                 # compare this and last cursor, just in case
                 if this_cursor == last_cursor:
                     print("Last two cursors are the same ({}), finishing.".format(this_cursor))
                     return "no_more_page"
 
+                # if has no more page and cursor none
                 if not edge_to_media["page_info"]["has_next_page"] and this_cursor == None:
                     print("Successfully scraped until last page for {}".format(object_id_or_string))
+                    open("{}{}_last_cursor.txt".format(out_dir,object_id_or_string), 'a').write("Last_Cursor_empty"+"\n") 
+                    return "no_more_page"
+                
+                # if has next page but cursor is emtpy
+                if edge_to_media["page_info"]["has_next_page"] and this_cursor == "":
+                    print("Last cursor was empty for {}. Can't scrape further.".format(object_id_or_string))
+                    open("{}{}_last_cursor.txt".format(out_dir,object_id_or_string), 'a').write("Last_Cursor_empty"+"\n") 
                     return "no_more_page"
 
                 # for --last_cursor, long pause or jupyter shutdown: saves only the last cursor
