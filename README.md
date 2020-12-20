@@ -91,6 +91,7 @@ Optional Arguments:
   --tor_timeout               Set tor timeout when tor session gets blocked for some reason (default 600 seconds)
   --user_agent                Change user agent if needed
   --threads                   Number of concurrent threads
+  --save_as                   csv | json
 ```  
 Example commands:
 ```
@@ -101,6 +102,8 @@ Example commands:
 5. python fast-instagram-scraper.py byebyedonald,123456789987,georocks hashtag --list --location_or_hashtag_list hashtag,location,hashtag --max_posts 100 
 ```
 For the last command hashtag argument is a fallback in case the list passed after is not valid. If --location_or_hashtag_list is valid hashtag will be overwritten by the respective value.
+
+Note that saving as json will be memory expensive as Instagram provides lots of different (unnecessary) image thumbnail URLs. Saving as csv is around 1 kb/post; json 10 kb/post.
 
 ## Multithreading 🐙
 Fast Instagram Scraper supports multithreading. Each thread has a different tor end node. Don't use the --list flag when multithreading. 
