@@ -147,11 +147,26 @@ def torsession():
                 post_list.extend(ipage) # extend list with all posts (50 every time)
                 pbar.update(len(ipage))
 
-                # saves all posts as csv for every iteration, 50 at once
-                pf = pd.json_normalize(post_list)
-                
-                file_name = "{}{}{}.csv".format(out_dir, object_id_or_string, run_number)
-                pf.to_csv(file_name, index=False)
+                # csv saving logic as pandas df
+                if save_as == "csv":
+                    pf = pd.json_normalize(post_list)
+                    file_name = "{}{}{}.csv".format(out_dir, object_id_or_string, run_number)
+                    pf.to_csv(file_name, index=False)
+
+                # json saving logic 
+                elif save_as == "json":
+                    if run_number != "":
+                        run_number_loop = "_" + str(float(datetime.datetime.now().timestamp())).replace(".","") + "_" + run_number # change to some index number or just leave the timestamp but watch out for duplicates!
+                    else:
+                        run_number_loop = "_" + str(float(datetime.datetime.now().timestamp())).replace(".","") # change to some index number or just leave the timestamp but watch out for duplicates!
+
+                    file_name = "{}{}{}.json".format(out_dir, object_id_or_string, run_number_loop)
+                    with open(file_name, 'w', encoding='utf-8') as f:
+                        json.dump(idata["data"][location_or_hashtag], f, ensure_ascii=False, indent=4)
+
+                else:
+                    raise RuntimeError('--save_as flag must be "csv" or "json"') 
+
                 print("File saved: iteration: {}".format(i))
 
                 this_cursor = edge_to_media["page_info"]["end_cursor"] # this_cursor is next page cursor means unscraped page
@@ -234,6 +249,7 @@ parser.add_argument('--location_or_hashtag_list', type=str, help='For heterogeno
 parser.add_argument('--tor_timeout', type=int, help='Set tor timeout when tor session gets blocked for some reason (default 600 seconds)', default=600)
 parser.add_argument('--user_agent', type=str, help='Change user agent if needed', default="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36")
 parser.add_argument('--threads', type=int, help='Change the number of threads. Each thread has a different tor end node when scraping for list.', default=1)
+parser.add_argument('--save_as', type=str, help='"csv" or "json". Modified csv is default, takes much less space (~1kb/post) with removed useless columns (can be defined under delete_keys() function). "csv" will create concatenated files whereas "json" will save original jsons of ~50 to ~150 posts each at 10kb/post.', default="csv")
 
 # Optional true/false
 parser.add_argument('--list', action='store_true', help='Scrape for list')
@@ -257,6 +273,7 @@ if __name__ == "__main__":
     tor_timeout = args.tor_timeout
     user_agent = args.user_agent
     threads_no = args.threads
+    save_as = args.save_as
 
     last_cursor = "" # set globally to "", will be overwritten 
 
@@ -278,13 +295,15 @@ if __name__ == "__main__":
                 cli_line = 'python fast-instagram-scraper.py "{}" {} --max_posts {} --max_requests {} --wait_between_requests {} --max_tor_renew {} --tor_timeout {} --user_agent "{}"'.format(one_obj, location_or_hashtag,max_posts,max_requests,wait_between_requests, max_tor_renew,tor_timeout,user_agent)
 
                 if args.last_cursor:
-                    cli_line += " --last_cursor"
-                if run_number != "":
-                    cli_line += " --run_number {}".format(run_number)
-                if out_dir != "":
-                    cli_line += " --out_dir {}".format(out_dir)
+                    cli_line += ' --last_cursor'
+                if run_number != '':
+                    cli_line += ' --run_number {}'.format(run_number)
+                if out_dir != '':
+                    cli_line += ' --out_dir {}'.format(out_dir)
                 if isinstance(one_obj, list): 
-                    cli_line += " --list"
+                    cli_line += ' --list'
+                if save_as != '':
+                    cli_line += ' --save_as "{}"'.format(save_as)
 
                 subprocess.run(cli_line)
                 #print(cli_line)
@@ -302,7 +321,12 @@ if __name__ == "__main__":
         if args.last_cursor:
             from pathlib import Path
             last_cursor = Path("{}{}_last_cursor.txt".format(out_dir,object_id_or_string)).read_text().split("\n")[-2] # reads last cursor
-            run_number = int(datetime.datetime.now().timestamp()) # change to some index number or just leave the timestamp but watch out for duplicates!
+            if run_number != "":
+                run_number = "_" + str(float(datetime.datetime.now().timestamp())).replace(".","") + "_" + run_number # change to some index number or just leave the timestamp but watch out for duplicates!
+            else:
+                run_number = "_" + str(float(datetime.datetime.now().timestamp())).replace(".","") # change to some index number or just leave the timestamp but watch out for duplicates!
+
+
             scrape()
         else: 
             scrape()
