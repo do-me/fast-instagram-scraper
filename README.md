@@ -79,7 +79,7 @@ Positional Arguments:
 Optional Arguments:
 ```
   -h, --help                  Show this help message and exit
-  --out_dir                   Path to store csv like /.../scrape/ default is working directory
+  --out_dir                   Path to store csv like scrape/ (default is working directory)
   --max_posts                 Limit posts to scrape 
   --max_requests              Limit requests
   --wait_between_requests     Waiting time between requests in seconds
