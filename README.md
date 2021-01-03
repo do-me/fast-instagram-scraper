@@ -119,6 +119,8 @@ python fast-instagram-scraper.py byebyedonald,hellohereIam,[hereiam,goodlife,geo
 ```
 You can use all arguments as definded above like `--last_cursor`.
 
+Note that on Ubuntu at the moment you should add `shell=True` argument to `subprocess.run(cli_line, shell=True)` in `scrape_subprocess()` function in source code. It's a [minor issue on Ubuntu](https://stackoverflow.com/questions/3172470/actual-meaning-of-shell-true-in-subprocess#:~:text=After%20reading%20the%20docs%2C%20I,the%20process%20is%20directly%20started.) but working working fine on Windows.
+
 ## Parallelizing 👷‍♀️ 👷‍♂️
 The above method is the preferred way to mine simultanously for several hashtags/locations. If however you would like to monitor every process in a shell, do as follows.
 You can run several parallel tor sessions and hence run multiple instances of Fast Instagram Scraper. Let's say you have a list of location IDs and want to get few posts of every location. When running the script sequentially, it will mine one location after another. 
