@@ -1,5 +1,5 @@
 # Fast Instagram Scraper
-v1.2.2
+v1.2.3
 
 ## Jupyter and fully functional command line version available! 
 
@@ -10,6 +10,8 @@ A fast Instagram Scraper based on Torpy. Scrapes post metadata for multiple hash
 Please use responsibly and respect Instagram's terms of use! If you enjoy Fast Instagram Scraper consider giving a ⭐
 
 *Update December 2020*: Hashtags will be mined around 4-5 times faster due to larger batches even though Tor end nodes get blocked more often than for location IDs.
+
+*For newbies*: See the Helper_Functions.ipynb juypter notebook to get a quick idea of how Fast Instagram Scraper works! 
 
 ## Command Line Version
 ![Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper/blob/main/fast-instagram-scraper-cli.gif)
