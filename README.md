@@ -11,7 +11,7 @@ Please use responsibly and respect Instagram's terms of use! If you enjoy Fast I
 
 *Update December 2020*: Hashtags will be mined around 4-5 times faster due to larger batches even though Tor end nodes get blocked more often than for location IDs.
 
-*For newbies*: See the Helper_Functions.ipynb juypter notebook to get a quick idea of how Fast Instagram Scraper works! 
+*For newbies*: See the Helper_Functions.ipynb jupyter notebook to get a quick idea of how Fast Instagram Scraper works! 
 
 ## Command Line Version
 ![Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper/blob/main/fast-instagram-scraper-cli.gif)
