@@ -22,6 +22,8 @@ import datetime
 from tqdm import tqdm # progress bar
 import argparse
 from func_timeout import func_timeout, FunctionTimedOut
+import shutil
+import threading
 
 # just in the beginning: define empty variables
 # IMPORTANT: when pausing (=interrupting jupyter) and resuming do not execute this cell! 
@@ -84,7 +86,36 @@ def str_list_parser(raw_str_in):
     parsed = [i for i in in_items if i != ""] +raw_str_in_lists
     return parsed
 
-ploc = None
+# starting a new thread 
+def start_thread(func, name=None, args = []):
+    threading.Thread(target=func, name=name, args=args).start()
+
+def download_img(session, i_img_name, i_img_link):
+    try:
+        img_req = session.get(i_img_link,headers = headers, stream=True) # fire request
+        with open('{}{}.png'.format(out_dir, i_img_name), 'wb') as out_file: # saves png file always, if status is 200 file will have 1kb only
+            shutil.copyfileobj(img_req.raw, out_file)
+    except:
+        print("Could't download image {} with link {}.".format(img_name, img_link))
+        return "download_failed"
+
+def tor_img_download_loop(i_img_dict): 
+    with TorRequests() as tor_requests:
+        with tor_requests.get_session() as sess:
+            print("Image download tor circuit built.")
+            for i, (k, v) in tqdm(enumerate(i_img_dict.items())):
+                download_img(sess,k,v)
+                # remaining_keys = list(img_dict.keys())[i:]
+                # remaining_dict = {k: img_dict[k] for k in remaining_keys}
+
+def download_images(d_img_dict):    
+    try: 
+        func_timeout(media_wait_between_requests, tor_img_download_loop, args = [d_img_dict])
+    except FunctionTimedOut:
+        print ("Torsession terminated after {} seconds tor_timeout.".format(media_wait_between_requests))
+        return
+
+ploc = None # post location
 
 total_posts = 0
 # main scraping function
@@ -95,10 +126,6 @@ def torsession():
     if last_cursor == "Last_Cursor_empty":
         print("Last cursor was empty for {}. Can't scrape further.".format(object_id_or_string))
         return "no_more_page"
-    
-    # Set user agent, i.e. from https://techblog.willshouse.com/2012/01/03/most-common-user-agents/
-    headers = {}
-    headers['User-agent'] = user_agent
 
     with TorRequests() as tor_requests:
         with tor_requests.get_session() as sess, tqdm(total=0) as pbar:
@@ -147,11 +174,20 @@ def torsession():
                 post_list.extend(ipage) # extend list with all posts (50 every time)
                 pbar.update(len(ipage))
 
+                # start a new thread to download media 
+                if save_media:
+                    img_df = pd.json_normalize(ipage) 
+                    img_name = img_df["shortcode"]# name
+                    img_link = img_df["display_url"]# link
+                    img_dict = dict(zip(img_name,img_link))
+
+                    start_thread(download_images, args =[img_dict])
+                
                 # csv saving logic as pandas df
                 if save_as == "csv":
                     pf = pd.json_normalize(post_list)
                     file_name = "{}{}{}.csv".format(out_dir, object_id_or_string, run_number)
-                    pf.to_csv(file_name, index=False)
+                    pf.to_csv(file_name, index=False, encoding=out_encoding)
 
                 # json saving logic 
                 elif save_as == "json":
@@ -161,8 +197,11 @@ def torsession():
                         run_number_loop = "_" + str(float(datetime.datetime.now().timestamp())).replace(".","") # change to some index number or just leave the timestamp but watch out for duplicates!
 
                     file_name = "{}{}{}.json".format(out_dir, object_id_or_string, run_number_loop)
-                    with open(file_name, 'w', encoding='utf-8') as f:
-                        json.dump(idata["data"][location_or_hashtag], f, ensure_ascii=False, indent=4)
+                    with open(file_name, 'w', encoding=out_encoding) as f:
+                        ensure_ascii_true = False
+                        if out_encoding == "ascii":
+                            ensure_ascii_true = True
+                        json.dump(idata, f, ensure_ascii=ensure_ascii_true)
 
                 else:
                     raise RuntimeError('--save_as flag must be "csv" or "json"') 
@@ -250,10 +289,13 @@ parser.add_argument('--tor_timeout', type=int, help='Set tor timeout when tor se
 parser.add_argument('--user_agent', type=str, help='Change user agent if needed', default="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36")
 parser.add_argument('--threads', type=int, help='Change the number of threads. Each thread has a different tor end node when scraping for list.', default=1)
 parser.add_argument('--save_as', type=str, help='"csv" or "json". Modified csv is default, takes much less space (~1kb/post) with removed useless columns (can be defined under delete_keys() function). "csv" will create concatenated files whereas "json" will save original jsons of ~50 to ~150 posts each at 10kb/post.', default="csv")
+parser.add_argument('--encoding', type=str, help='"utf-8" is default and recommended as there are plenty of non-ascii characters on Instagram. Ascii only works for json but not for csv.', default="utf-8")
+parser.add_argument('--media_wait_between_requests', type=int, help='Waiting time between media requests',default=300)
 
 # Optional true/false
 parser.add_argument('--list', action='store_true', help='Scrape for list')
 parser.add_argument('--last_cursor', action='store_true', help='Continue from last cursor')
+parser.add_argument('--save_media', action='store_true', help='Save media (currently only images)')
 
 args = parser.parse_args()
 
@@ -274,6 +316,13 @@ if __name__ == "__main__":
     user_agent = args.user_agent
     threads_no = args.threads
     save_as = args.save_as
+    out_encoding = args.encoding
+    save_media = args.save_media
+    media_wait_between_requests = args.media_wait_between_requests
+
+    # Set user agent, i.e. from https://techblog.willshouse.com/2012/01/03/most-common-user-agents/
+    headers = {}
+    headers['User-agent'] = user_agent
 
     last_cursor = "" # set globally to "", will be overwritten 
 
@@ -304,6 +353,12 @@ if __name__ == "__main__":
                     cli_line += ' --list'
                 if save_as != '':
                     cli_line += ' --save_as "{}"'.format(save_as)
+                if out_encoding != '':
+                    cli_line += ' --encoding "{}"'.format(out_encoding)
+                if args.save_media:
+                    cli_line += ' --save_media'
+                if media_wait_between_requests != '':
+                    cli_line += ' --media_wait_between_requests "{}"'.format(media_wait_between_requests)
 
                 subprocess.run(cli_line)
                 #print(cli_line)
@@ -325,8 +380,6 @@ if __name__ == "__main__":
                 run_number = "_" + str(float(datetime.datetime.now().timestamp())).replace(".","") + "_" + run_number # change to some index number or just leave the timestamp but watch out for duplicates!
             else:
                 run_number = "_" + str(float(datetime.datetime.now().timestamp())).replace(".","") # change to some index number or just leave the timestamp but watch out for duplicates!
-
-
             scrape()
         else: 
             scrape()
