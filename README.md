@@ -1,22 +1,24 @@
 # Fast Instagram Scraper
-v1.2.3
+v2.0.0 (beta)
 
-## Jupyter and fully functional command line version available! 
+## Scrapes metadata and images *fast* over the Tor network. No login, no API-key needed.
 
-A fast Instagram Scraper based on Torpy. Scrapes post metadata for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) sequentially, concurrently or combined. Multithreading supported.
+A fast Instagram Scraper based on Torpy. Downloads post metadata and images for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) sequentially, concurrently or combined. Multithreading supported.
 
 *Requirements: [Torpy](https://github.com/torpyorg/torpy) package installed but no login and no API-Key. Working for all OS.*
 
-Please use responsibly and respect Instagram's terms of use! If you enjoy Fast Instagram Scraper consider giving a ⭐
+## Please use responsibly and respect Instagram's terms of use! This tool is exclusively thought for research purposes, not for commercial use! If you enjoy Fast Instagram Scraper consider giving a ⭐.
 
 *Update December 2020*: Hashtags will be mined around 4-5 times faster due to larger batches even though Tor end nodes get blocked more often than for location IDs.
+
+*Update January 2021*: Downloading images now supported - also in combination with multithreading! 
 
 *For newbies*: See the Helper_Functions.ipynb jupyter notebook to get a quick idea of how Fast Instagram Scraper works! 
 
 ## Command Line Version
 ![Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper/blob/main/fast-instagram-scraper-cli.gif)
 
-## Jupyter Version
+## Jupyter Version [deprecated]
 ![Fast Instagram Scraper](https://github.com/do-me/fast-instagram-scraper/blob/main/Fast%20Instagram%20Scraper.gif)
 
 For this scraper I had the same motivation as for [Simple Instagram Scraper](https://github.com/do-me/Simple-Instagram-Scraper):
@@ -233,3 +235,6 @@ Hashtag extraction, reprojetion in web mercator (EPSG:3857) and unique points fi
 ## More
 - [Blog article](https://geo.rocks/post/fast-instagram-scraper/) about Fast Instagram Scraper
 - Find me and stay tuned on [my blog](https://geo.rocks)!
+
+## Star 
+Star this repo if you enjoy! ⭐
