@@ -1,7 +1,7 @@
 # Fast Instagram Scraper
-v2.0.0 (beta)
+v2.0.0 (beta) - licensed under CC BY-NC-SA 4.0 
 
-## Scrapes metadata and images *fast* over the Tor network. No login, no API-key needed.
+## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
 A fast Instagram Scraper based on Torpy. Downloads post metadata and images for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) sequentially, concurrently or combined. Multithreading supported.
 
