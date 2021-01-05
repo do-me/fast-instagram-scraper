@@ -1,5 +1,5 @@
 # Fast Instagram Scraper
-v2.0.0 (beta) - licensed under CC BY-NC-SA 4.0 
+v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
