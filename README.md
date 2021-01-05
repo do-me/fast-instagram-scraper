@@ -230,7 +230,7 @@ See the [jupyter notebook in this repo](https://github.com/do-me/fast-instagram-
 Hashtag extraction, reprojetion in web mercator (EPSG:3857) and unique points filter included.
 
 ## To Do
-- Create interface for (LBSNTransform)[https://pypi.org/project/lbsntransform/]
+- Create interface for [LBSNTransform](https://pypi.org/project/lbsntransform/)
 
 ## More
 - [Blog article](https://geo.rocks/post/fast-instagram-scraper/) about Fast Instagram Scraper
