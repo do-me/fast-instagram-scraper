@@ -1,6 +1,8 @@
 # Fast Instagram Scraper
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
+UPDATE 2020/01/10: Currently not working due to [Torpy bug](https://github.com/torpyorg/torpy/issues/19).
+
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
 A fast Instagram Scraper based on Torpy. Downloads post metadata and images for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) sequentially, concurrently or combined. Multithreading supported.
