@@ -1,7 +1,7 @@
 # Fast Instagram Scraper
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
-UPDATE 2020/01/10: Currently not working due to [Torpy bug](https://github.com/torpyorg/torpy/issues/19).
+UPDATE 2020/01/10: Currently not working on some Windows devices due to [Torpy bug](https://github.com/torpyorg/torpy/issues/20).
 
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
