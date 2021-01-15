@@ -1,7 +1,7 @@
 # Fast Instagram Scraper
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
-UPDATE 2020/01/10: Currently sometimes not working due to [Torpy bug](https://github.com/torpyorg/torpy/issues/20).
+UPDATE 2021/01/10: Currently sometimes not working due to [Torpy bug](https://github.com/torpyorg/torpy/issues/20).
 Until it is fixed, please test the following code after installation before using Fast Instagram Scraper to avoid inconveniences:
 
 ```
@@ -12,7 +12,9 @@ with TorRequests() as tor_requests:
         print(response)
 ```
 
-If it return `<Response [200]>` you are ready to go! If not, it is due to the above mentioned bug and you gotta be a little patient. Retry after some hours or half a day - it should work at some point. 
+If it returns `<Response [200]>` you are ready to go! If not, it is due to the above mentioned bug and you gotta be a little patient. Retry after some hours or half a day - it should work at some point. 
+
+UPDATE 2021/01/15: Torpy bug is fixed. Just install torpy from [latest master branch](https://github.com/torpyorg/torpy). A quick how-to will follow.
 
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
