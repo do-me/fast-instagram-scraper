@@ -1,20 +1,8 @@
 # Fast Instagram Scraper
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
-UPDATE 2021/01/10: Currently sometimes not working due to [Torpy bug](https://github.com/torpyorg/torpy/issues/20).
-Until it is fixed, please test the following code after installation before using Fast Instagram Scraper to avoid inconveniences:
-
-```
-from torpy.http.requests import TorRequests
-with TorRequests() as tor_requests:
-    with tor_requests.get_session() as sess:
-        response = sess.get("https://www.google.com/")
-        print(response)
-```
-
-If it returns `<Response [200]>` you are ready to go! If not, it is due to the above mentioned bug and you gotta be a little patient. Retry after some hours or half a day - it should work at some point. 
-
-UPDATE 2021/01/15: Torpy bug is fixed. Just install torpy from [latest master branch](https://github.com/torpyorg/torpy). A quick how-to will follow.
+UPDATE 2021/01/16: For the ones that cloned this repo and created their conda envs before 2021/01/16: If you run into any bugs with Torpy make sure to have the latest version from [master branch](https://github.com/torpyorg/torpy). Just run `pip install --upgrade git+git://github.com/torpyorg/torpy@master` in your conda env (`conda activate scrape`). 
+Or in any doubt, just create a fresh env using the updated installation guideline below.
 
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
@@ -46,13 +34,14 @@ Best create a virtual environment with conda first and install the necessary pac
 ```python
 conda create --name scrape python=3.9 
 conda activate scrape
-pip install torpy func-timeout pandas tqdm requests
+pip install func-timeout pandas tqdm requests
+pip install git+git://github.com/torpyorg/torpy@master
 ```
 For the jupyter notebook version you need to install ipython as well:
 ```python
 pip install ipython
 ```
-After clone the repo and you are good to go:
+Afterwards clone the repo and you are good to go:
 ```
 git clone https://github.com/do-me/fast-instagram-scraper.git
 ```
