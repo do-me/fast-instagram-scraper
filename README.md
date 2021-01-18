@@ -127,6 +127,17 @@ python fast-instagram-scraper.py byebyedonald,hellohereIam,[hereiam,goodlife,geo
 ```
 You can use all arguments as definded above like `--last_cursor`.
 
+If you want to monitor how many files per second are downloaded use [New Files Monitor](https://github.com/do-me/New-Files-Monitor) that I just created for this purpose. It gives you a live files/s rate and a total file count.
+
+```
+ 6.62 files/s
+ 1795 files total
+ 2021-01-16 19:23:55.067400 start count
+ 2021-01-16 19:24:11.363195 end count
+ 16 seconds delta
+ 106 files delta
+```
+
 Note that on Ubuntu at the moment you should add `shell=True` argument to `subprocess.run(cli_line, shell=True)` in `scrape_subprocess()` function in source code. It's a [minor issue on Ubuntu](https://stackoverflow.com/questions/3172470/actual-meaning-of-shell-true-in-subprocess#:~:text=After%20reading%20the%20docs%2C%20I,the%20process%20is%20directly%20started.) but working fine on Windows.
 
 ## Parallelizing 👷‍♀️ 👷‍♂️
