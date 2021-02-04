@@ -1,7 +1,7 @@
 # Fast Instagram Scraper
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
-UPDATE 2021/01/16: For the ones that cloned this repo and created their conda envs before 2021/01/16: If you run into any bugs with Torpy make sure to have the latest version from [master branch](https://github.com/torpyorg/torpy). Just run `pip install --upgrade git+git://github.com/torpyorg/torpy@master` in your conda env (`conda activate scrape`). Alternatively install torpy manually by downloading the [latest version](https://github.com/torpyorg/torpy/releases/) and installing i.e. with 'pip install torpy-1.1.5.tar.gz'.
+UPDATE 2021/01/16: For the ones that cloned this repo and created their conda envs before 2021/01/16: If you run into any bugs with Torpy make sure to have the latest version from [master branch](https://github.com/torpyorg/torpy). Just run `pip install --upgrade git+git://github.com/torpyorg/torpy@master` in your conda env (`conda activate scrape`). Alternatively install torpy manually by downloading the [latest version](https://github.com/torpyorg/torpy/releases/) and installing i.e. with `pip install torpy-1.1.5.tar.gz`.
 In any doubt, just create a fresh env using the updated installation guideline below.
 
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
