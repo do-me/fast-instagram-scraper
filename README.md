@@ -1,8 +1,8 @@
 # Fast Instagram Scraper
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
-UPDATE 2021/01/16: For the ones that cloned this repo and created their conda envs before 2021/01/16: If you run into any bugs with Torpy make sure to have the latest version from [master branch](https://github.com/torpyorg/torpy). Just run `pip install --upgrade git+git://github.com/torpyorg/torpy@master` in your conda env (`conda activate scrape`). 
-Or in any doubt, just create a fresh env using the updated installation guideline below.
+UPDATE 2021/01/16: For the ones that cloned this repo and created their conda envs before 2021/01/16: If you run into any bugs with Torpy make sure to have the latest version from [master branch](https://github.com/torpyorg/torpy). Just run `pip install --upgrade git+git://github.com/torpyorg/torpy@master` in your conda env (`conda activate scrape`). Alternatively install torpy manually by downloading the [latest version](https://github.com/torpyorg/torpy/releases/) and installing i.e. with 'pip install torpy-1.1.5.tar.gz'.
+In any doubt, just create a fresh env using the updated installation guideline below.
 
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
@@ -225,8 +225,9 @@ You can raise the chunk size according to your system but be polite and don't ex
 However, if for example you would like to visualize the approximately 1000 location IDs Instagram is displaying for each city of a country under https://www.instagram.com/explore/locations you could do this quite fast by first [mining the location IDs as described in my blog post](https://geo.rocks/post/mining-locations-ids/) in two simple steps with javascript and after chunking the locations i.e. to 20 chunks of 50 locations. Limit the max_posts parameter to a low number (technically anything between 1 and 50 will have the same effect) i.e. 20 and go for it! Depending on your luck with good tor connections you'll be done in around 10-20 minutes! 
 
 ## Recommendation for mining all posts from one location ID or hashtag 
-When mining for locations or hashtags with a vast amount of posts it might be better to scrape with multiple commands by using --last_cursor instead of mining everything in one go. At the moment the saving logic append all JSON data to a list, converts it to csv and saves the entire file which becomes quite inefficient for big files. 
-However mining in smaller chunks has more advantages so just go i.e. for maximum 20000 - 50000 posts resulting in 16 - 38 mb files each. In my case one iteration (including the cost efficient saving process) was still executed in a reasonable amount of time (<15 seconds). For the very first iteration mine normally. After don't forget the --last_cursor flag. A timeout of 600 seconds per iteration (default) proved to work well. Chaining commands with a semicolon for Powershell and bash helps to keep the process going i.e.:
+When mining for locations or hashtags with a vast amount of posts it might be better to scrape with multiple commands by using --last_cursor instead of mining everything in one go. At the moment the saving logic append all JSON data to a list, converts it to csv and saves the entire file which becomes quite in
+for big files. 
+However mining in smaller chunks has more advantages so just go i.e. for maximum 20000 - 50000 posts resulting in 16 - 38 mb files each. In my case one iteration (including the costly saving process) was still executed in a reasonable amount of time (<15 seconds). For the very first iteration mine normally. After don't forget the --last_cursor flag. A timeout of 600 seconds per iteration (default) proved to work well. Chaining commands with a semicolon for Powershell and bash helps to keep the process going i.e.:
 ```bash
 python fast-instagram-scraper.py 123456789987 location --max_posts 20000;
 python fast-instagram-scraper.py 123456789987 location --max_posts 20000 --last_cursor;
