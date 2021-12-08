@@ -3,6 +3,8 @@ v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/lic
 
 UPDATE 2021/08/26: If it doesn't work for you please see [this issue](https://github.com/do-me/fast-instagram-scraper/issues/3).
 
+**Looking for quick data analysis? [LBSN Dashboard](https://geo.rocks/lbsndashboard) will be the answer. Currently available as (frontend-only) prototype for Bonn.**
+
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
 A fast Instagram Scraper based on Torpy. Downloads post metadata and images for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) sequentially, concurrently or combined. Multithreading supported.
