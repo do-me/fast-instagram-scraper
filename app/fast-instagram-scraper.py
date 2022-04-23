@@ -26,8 +26,6 @@ import shutil
 import threading
 
 # just in the beginning: define empty variables
-# IMPORTANT: when pausing (=interrupting jupyter) and resuming do not execute this cell! 
-# just execute the main loop below as last_cursor and post_list will be in memory
 post_list = []
 
 # a cursor is an arbitrary hash to paginate through Instagram's posts
@@ -45,10 +43,10 @@ hashtag_hash = "ded47faa9a1aaded10161a2ff32abb6b" # borrowed from https://github
 # returns right Instagram link
 def ilink(cursor=""):
     if location_or_hashtag == "location":
-        instalink = 'https://instagram.com/graphql/query/?query_hash='+location_hash+'&variables={"id":"' + str(object_id_or_string) + '","first":50,"after":"'+ cursor +'"}'
+        instalink = 'https://www.instagram.com/explore/locations/' + str(object_id_or_string) + '/?__a=1&max_id=' + cursor 
         return instalink
     elif location_or_hashtag == "hashtag":
-        instalink = 'https://instagram.com/graphql/query/?query_hash='+hashtag_hash+'&variables={"tag_name":"' + str(object_id_or_string) + '","first":50,"after":"'+ cursor +'"}'
+        instalink = 'https://www.instagram.com/explore/tags/' + str(object_id_or_string) + '/?__a=1&max_id=' + cursor 
         return instalink
     else:
         raise RuntimeError('location_or_hashtag variable must be location or hashtag')        
@@ -150,12 +148,12 @@ def torsession():
                         print("Tor end node blocked.")
                     return # go back to main loop and get next session
                 
-                if idata["data"][location_or_hashtag] == None:
+                if idata["graphql"][location_or_hashtag] == None:
                     print("No posts available!")
                     return "no_more_page"
                     
                 # access response json
-                edge_to_media = idata["data"][location_or_hashtag]["edge_{}_to_media".format(location_or_hashtag)]
+                edge_to_media = idata["graphql"][location_or_hashtag]["edge_{}_to_media".format(location_or_hashtag)]
                 
                 # if while scraping new posts appear, they will be considered!
                 total_posts = edge_to_media["count"]
@@ -166,7 +164,7 @@ def torsession():
                 
                 # append location information for location scraping
                 if location_or_hashtag == "location":
-                    ploc = idata["data"][location_or_hashtag]
+                    ploc = idata["graphql"][location_or_hashtag]
                     ipage = add_locations_data_to_cleaned_node(ipage)
                 else: 
                     ipage = add_locations_data_to_cleaned_node(ipage, just_clean=True)
