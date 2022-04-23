@@ -1,13 +1,13 @@
 # Fast Instagram Scraper
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
-UPDATE 2021/08/26: If it doesn't work for you please see [this issue](https://github.com/do-me/fast-instagram-scraper/issues/3).
+UPDATE: 2022/04/23: Fixed new graphql hashtag endpoint. **Locations cannot be mined without login anymore**. Test [here](instagram.com/explore/locations) and see [this issue](https://github.com/do-me/fast-instagram-scraper/issues/3) for an alternative workflow.
 
-**Looking for quick data analysis? [LBSN Dashboard](https://geo.rocks/lbsndashboard) will be the answer. Currently available as (frontend-only) prototype for Bonn.**
+**Looking for quick data analysis? LBSN Dashboard will be the answer. Currently available as (frontend-only) prototype for [Bonn](https://geo.rocks/dashboards/bonn) and [Waynesboro](https://geo.rocks/dashboards/waynesboro).**
 
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
-A fast Instagram Scraper based on Torpy. Downloads post metadata and images for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) sequentially, concurrently or combined. Multithreading supported.
+A fast Instagram Scraper based on Torpy. Downloads post metadata and images for multiple hashtags ~and [location ids](https://geo.rocks/post/mining-locations-ids/)~ sequentially, concurrently or combined. Multithreading supported.
 
 *Requirements: [Torpy](https://github.com/torpyorg/torpy) package installed but no login and no API-Key. Working for all OS.*
 
