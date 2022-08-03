@@ -1,7 +1,7 @@
 # Fast Instagram Scraper
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
-UPDATE: 2022/04/23: Fixed new graphql hashtag endpoint. **Locations cannot be mined without login anymore**. Test [here](instagram.com/explore/locations) and see [this issue](https://github.com/do-me/fast-instagram-scraper/issues/3) for an alternative workflow.
+UPDATE: 2022/04/23: Fixed new graphql hashtag endpoint. **Locations cannot be mined without login anymore**. Test [here](https://instagram.com/explore/locations) and see [this issue](https://github.com/do-me/fast-instagram-scraper/issues/3) for an alternative workflow.
 
 **Looking for quick data analysis? LBSN Dashboard will be the answer. Currently available as (frontend-only) prototype for [Bonn](https://geo.rocks/dashboards/bonn) and [Waynesboro](https://geo.rocks/dashboards/waynesboro).**
 
