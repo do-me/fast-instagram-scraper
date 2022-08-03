@@ -1,13 +1,11 @@
 # Fast Instagram Scraper
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
-UPDATE: 2022/04/23: Fixed new graphql hashtag endpoint. **Locations cannot be mined without login anymore**. Test [here](https://instagram.com/explore/locations) and see [this issue](https://github.com/do-me/fast-instagram-scraper/issues/3) for an alternative workflow.
-
 **Looking for quick data analysis? LBSN Dashboard will be the answer. Currently available as (frontend-only) prototype for [Bonn](https://geo.rocks/dashboards/bonn) and [Waynesboro](https://geo.rocks/dashboards/waynesboro).**
 
 ## Downloads metadata and images *fast* over the Tor network. No login, no API-key needed.
 
-A fast Instagram Scraper based on Torpy. Downloads post metadata and images for multiple hashtags ~and [location ids](https://geo.rocks/post/mining-locations-ids/)~ sequentially, concurrently or combined. Multithreading supported.
+A fast Instagram Scraper based on Torpy. Downloads post metadata and images for multiple hashtags and [location ids](https://geo.rocks/post/mining-locations-ids/) sequentially, concurrently or combined. Multithreading supported.
 
 *Requirements: [Torpy](https://github.com/torpyorg/torpy) package installed but no login and no API-Key. Working for all OS.*
 
@@ -16,6 +14,10 @@ A fast Instagram Scraper based on Torpy. Downloads post metadata and images for 
 *Update December 2020*: Hashtags will be mined around 4-5 times faster due to larger batches even though Tor end nodes get blocked more often than for location IDs.
 
 *Update January 2021*: Downloading images now supported - also in combination with multithreading! 
+
+*Update April 2022*: Fixed new graphql hashtag endpoint. ~**Locations cannot be mined without login anymore**. Test [here](https://instagram.com/explore/locations) and see [this issue](https://github.com/do-me/fast-instagram-scraper/issues/3) for an alternative workflow.~
+
+*Update August 2022*: Locations **can** be mined without login again.
 
 *For newbies*: See the Helper_Functions.ipynb jupyter notebook to get a quick idea of how Fast Instagram Scraper works! 
 
