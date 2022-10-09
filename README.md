@@ -1,4 +1,7 @@
 # Fast Instagram Scraper
+
+**Important: Needs slight rework due to recent API changes! Not working at the moment, PRs welcome!** 
+
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
 **Looking for quick data analysis? LBSN Dashboard will be the answer. Currently available as (frontend-only) prototype for [Bonn](https://geo.rocks/dashboards/bonn) and [Waynesboro](https://geo.rocks/dashboards/waynesboro).**
