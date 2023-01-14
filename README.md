@@ -1,6 +1,7 @@
 # Fast Instagram Scraper
 
 **Important: Needs slight rework due to recent API changes! Not working at the moment, PRs welcome!** 
+**Please read [this issue](https://github.com/do-me/fast-instagram-scraper/issues/4#issuecomment-1382752591) for information on Instagram's API**
 
 v2.0.0 (beta) - licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 
 
