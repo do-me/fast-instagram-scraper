@@ -1,5 +1,9 @@
 # Fast Instagram Scraper
 
+**UPDATE 11/2023**
+
+As [torpy is currently unmaintained and needs refactoring due to TOR changes from V2 to V3](https://github.com/torpyorg/torpy/issues/20#issuecomment-1826467859) fast-instagram-scraper won't work.
+
 **Important: Needs slight rework due to recent API changes! Not working at the moment, PRs welcome!** 
 **Please read [this issue](https://github.com/do-me/fast-instagram-scraper/issues/4#issuecomment-1382752591) for information on Instagram's API**
 
